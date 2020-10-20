@@ -10,8 +10,8 @@ void anyFunction1()
 {
     for (size_t i = 0; i < 10; i++)
     {
-        cout << "ID thread - " << this_thread::get_id() << "\tanyFunction1\t" << i << endl;;
-        this_thread::sleep_for(chrono::milliseconds(3000));
+        //cout << "ID thread - " << this_thread::get_id() << "\tanyFunction1\t" << i << endl;;
+        this_thread::sleep_for(chrono::seconds(3));
     }
     
 }
@@ -20,14 +20,15 @@ void anyFunction2()
 {
     for (size_t i = 0; i < 10; i++)
     {
-        cout << "ID thread - " << this_thread::get_id() << "\tanyFunction2\t" << i << endl;;
-        this_thread::sleep_for(chrono::milliseconds(1000));
+        //cout << "ID thread - " << this_thread::get_id() << "\tanyFunction2\t" << i << endl;;
+        this_thread::sleep_for(chrono::seconds(1));
     }
 
 }
 int main()
 {
     thread thread_object1(anyFunction1);
+    thread thread_object2(anyFunction2);
 
         /*The class thread represents a single thread of execution.Threads allow multiple functions to execute concurrently.
 
@@ -43,21 +44,34 @@ int main()
         No two std::thread objects may represent the same thread of execution; std::thread is not CopyConstructible or CopyAssignable, 
         although it is MoveConstructibleand MoveAssignable.*/
 
-    for (size_t i = 0; i < 10; i++)
+   /* for (size_t i = 0; i < 10; i++)
     {
         cout << "ID thread - " << this_thread::get_id() << "\tmain\t" << i << endl;;
         this_thread::sleep_for(chrono::milliseconds(3000));
-    }
+    }*/
+
+    cout << "thread 1 id: " << thread_object1.get_id() << '\n'
+         << "thread 2 id: " << thread_object2.get_id() << '\n';
+    
+    swap(thread_object1, thread_object2);
+
+    cout << "after std::swap(thread_object1, thread_object2):" << '\n'
+         << "thread 1 id: " << thread_object1.get_id() << '\n'
+         << "thread 2 id: " << thread_object2.get_id() << '\n';
+
+    thread_object1.swap(thread_object2);//Exchanges the underlying handles of two thread objects.
+
+
+    cout << "after thread_object1.swap(thread_object2):" << '\n'
+         << "thread 1 id: " << thread_object1.get_id() << '\n'
+         << "thread 2 id: " << thread_object2.get_id() << '\n';
 
     thread_object1.join(); //waits for a thread to finish its execution
+    thread_object2.join();
     
     //thread_object.detach(); //permits the thread to execute independently from the thread handle
     
-    
-   /* thread thread_object2(anyFunction2);
-    thread_object1.swap(thread_object2);
-    thread_object2.join();*/
-
+  
     return 0;
 }
 
